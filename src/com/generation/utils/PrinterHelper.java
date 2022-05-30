@@ -1,10 +1,12 @@
 package com.generation.utils;
 
+import com.generation.model.MyException;
 import com.generation.model.Student;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -47,12 +49,21 @@ public class PrinterHelper
                 System.out.println("| Enter student birth date(MM/dd/yyyy)|");
                 DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
                 //TODO validate date format and catch exception to avoid crash
-                // birthDate = formatter.parse(scanner.next());
+                Date today = new Date();
+//                System.out.println("[" + formatter.format(today) + "]");
                 birthDate = formatter.parse(scanner.next());
+
+                if (birthDate.after(today)) {
+                    // show custom error message if user enter's a birth date later than current system date
+                    throw new MyException("Birth date cannot be later than today's date.");
+                }
                 break;
             }
             catch (ParseException e) {
                 System.out.println("Invalid date format. Make sure you type date using the following format: MM/dd/yyyy");
+            }
+            catch (MyException e) {
+                System.out.println(e);
             }
         }
 

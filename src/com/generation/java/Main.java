@@ -2,6 +2,7 @@ package com.generation.java;
 
 import com.generation.model.Course;
 import com.generation.model.CourseGrade;
+import com.generation.model.MyException;
 import com.generation.model.Student;
 import com.generation.service.CourseService;
 import com.generation.service.StudentService;
@@ -122,9 +123,15 @@ public class Main
                 try {
                     System.out.println("Insert course grade (between 1.00 and 6.00) for:" + course.getCourse().getName());
                     grade = Double.parseDouble(scanner.next());
+                    if ( ! (grade >= 1 && grade <= 6) ) { // generate a custom exception if user does not enter an acceptable range of value
+                        throw new MyException("Enter a numeric value between 1.00 and 6.00 only");
+                    }
                 }
                 catch (NumberFormatException e) {
                     System.out.println("Invalid value, enter a numeric value between 1.00 and 6.00");
+                }
+                catch (MyException e) {
+                    System.out.println(e);
                 }
             } while ( ! (grade >= 1 && grade <= 6) ); // loop until user enters bet 1 and 6
             course.setGrade(grade);

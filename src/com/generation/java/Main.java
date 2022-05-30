@@ -50,23 +50,19 @@ public class Main
         while ( option != 8 );
     }
 
-    private static void enrollCourse( StudentService studentService, CourseService courseService,
-                                               Scanner scanner )
-    {
+    private static void enrollCourse( StudentService studentService, CourseService courseService, Scanner scanner ) {
         System.out.println( "Insert student ID" );
         String studentId = scanner.next();
         Student student = studentService.findStudent( studentId );
-        if ( student == null )
-        {
+        if ( student == null ) {
             System.out.println( "Invalid Student ID" );
             return;
         }
         System.out.println( student );
-        System.out.println( "Insert course ID" );
+        System.out.println( "Insert course ID (NOT CASE SENSITIVE)" );
         String courseId = scanner.next();
-        Course course = courseService.getCourse( courseId );
-        if ( course == null )
-        {
+        Course course = courseService.getCourse( courseId.toUpperCase() );
+        if ( course == null ) {
             System.out.println( "Invalid Course ID" );
             return;
         }

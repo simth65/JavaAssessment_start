@@ -52,7 +52,7 @@ public class PrinterHelper
                 break;
             }
             catch (ParseException e) {
-                System.out.println("Invalid date format, please enter a valid date MM/dd/yyyy");
+                System.out.println("Invalid date format. Make sure you type date using the following format: MM/dd/yyyy");
             }
         }
 

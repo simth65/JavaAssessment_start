@@ -1,12 +1,16 @@
 package com.generation.java;
 
 import com.generation.model.Course;
+import com.generation.model.CourseGrade;
 import com.generation.model.Student;
 import com.generation.service.CourseService;
 import com.generation.service.StudentService;
 import com.generation.utils.PrinterHelper;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main
@@ -89,10 +93,42 @@ public class Main
     {
 
         Student student = getStudentInformation( studentService, scanner );
-        System.out.println( "Enrolled course:" );
-
+//        System.out.println( "Enrolled course:" );
         //TODO
+        if (student != null) {
+            System.out.println(student);
+            List<CourseGrade> courseList = student.getEnrolledCourses();
+            if (courseList.size() > 0) {
+                System.out.println("Enrolled Courses:"); // display all the courses student enrolled to
+                for (CourseGrade c : courseList)
+                    System.out.println(c);
+            } else {
+                System.out.println("There are NO Course(s) available for grading.");
+                return;
+            }
 
+            // accept user's input for the course to be graded
+            System.out.println("Insert course ID to be graded (NOT CASE SENSITIVE)");
+            String courseId = scanner.next();
+            CourseGrade course = student.findCourseById( courseId.toUpperCase() );
+            if ( course == null ) {
+                System.out.println( "Course ID Not Found!" );
+                return;
+            }
+
+            // accept user's input for the grade
+            double grade = 0;
+            do {
+                try {
+                    System.out.println("Insert course grade (between 1.00 and 6.00) for:" + course.getCourse().getName());
+                    grade = Double.parseDouble(scanner.next());
+                }
+                catch (NumberFormatException e) {
+                    System.out.println("Invalid value, enter a numeric value between 1.00 and 6.00");
+                }
+            } while ( ! (grade >= 1 && grade <= 6) ); // loop until user enters bet 1 and 6
+            course.setGrade(grade);
+        }
     }
 
     private static Student getStudentInformation( StudentService studentService, Scanner scanner )
@@ -133,13 +169,17 @@ public class Main
         }
         else
         {
-            if (student.findPassedCourses().size() == 0)
+            List<Course> cl = student.findPassedCourses();
+            if ( cl.size() == 0)
             {
                 System.out.println( "No passed courses available" );
             }
            else
             {
-                System.out.println(student.findPassedCourses());
+                System.out.println("Courses with grades >= 3.0");
+                for( Course c: cl ) { // loop trough to print out nicely instate of [arraylist] result
+                    System.out.println(c);
+                }
             }
         }
     }
